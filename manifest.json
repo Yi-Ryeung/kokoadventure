@@ -1,13 +1,25 @@
 {
   "name": "Koko Adventure - Mine $KOKO",
-  "short_name": "Koko Adventure",
+  "short_name": "KokoAdventure",
+  "id": "com.koko.adventure",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "orientation": "landscape",
+  "orientation": "any",
   "background_color": "#080a10",
   "theme_color": "#080a10",
   "description": "Platformer game & $KOKO coin mining app on Solana.",
+  "categories": [
+    "games",
+    "entertainment"
+  ],
   "icons": [
+    {
+      "src": "assets/koko_coin.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "assets/koko_coin.png",
       "sizes": "512x512",
