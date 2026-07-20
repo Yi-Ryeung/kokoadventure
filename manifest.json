@@ -17,13 +17,13 @@
     {
       "src": "https://yi-ryeung.github.io/kokoadventure/assets/koko_coin.png",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any"
     },
     {
       "src": "https://yi-ryeung.github.io/kokoadventure/assets/koko_coin.png",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "maskable"
     }
   ]
