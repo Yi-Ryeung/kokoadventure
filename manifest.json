@@ -1,11 +1,18 @@
 {
   "name": "Koko Adventure - Mine $KOKO",
   "short_name": "KokoAdventure",
-  "start_url": "./index.html",
+  "id": "com.kokoadventure.myapp",
+  "start_url": "https://yi-ryeung.github.io/kokoadventure/",
+  "scope": "https://yi-ryeung.github.io/kokoadventure/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#080a10",
   "theme_color": "#080a10",
   "description": "Platformer game & $KOKO coin mining app on Solana.",
+  "categories": [
+    "games",
+    "entertainment"
+  ],
   "icons": [
     {
       "src": "./assets/icon-192.png",
