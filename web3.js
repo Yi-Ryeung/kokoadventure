@@ -308,6 +308,16 @@ document.addEventListener("DOMContentLoaded", () => {
             const name = opt.getAttribute('data-wallet');
             walletOverlay.classList.remove('active');
             
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            // Handle Mobile Deep Linking for Phantom
+            if (isMobile && name === 'Phantom' && !(window.solana && window.solana.isPhantom)) {
+                const cleanUrl = window.location.href.split('?')[0]; // Remove cache version params
+                const appUrl = encodeURIComponent(cleanUrl);
+                window.location.href = `https://phantom.app/ul/browse/${appUrl}?ref=${appUrl}`;
+                return;
+            }
+
             // Try connecting to real Phantom or Solflare if installed
             if (name === 'Phantom' && window.solana && window.solana.isPhantom) {
                 window.solana.connect()
@@ -316,8 +326,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.web3State.connected = true;
                         window.web3State.walletName = "Phantom";
                         window.web3State.walletAddress = pk;
-                        
-                        // Try fetching real balance if window.solana has it, otherwise default
                         saveWeb3State();
                         syncUI();
                     })
