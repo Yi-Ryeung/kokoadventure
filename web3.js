@@ -308,23 +308,60 @@ document.addEventListener("DOMContentLoaded", () => {
             const name = opt.getAttribute('data-wallet');
             walletOverlay.classList.remove('active');
             
-            // Simulating connecting
-            simulateTransaction(`Connecting to ${name}`, `Awaiting authorization approval...`, 2500, () => {
-                window.web3State.connected = true;
-                window.web3State.walletName = name;
-                
-                // Generate simulated public key
-                const characters = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-                let pk = 'KoKo';
-                for(let i=0; i<36; i++) {
-                    pk += characters.charAt(Math.floor(Math.random() * characters.length));
-                }
-                window.web3State.walletAddress = pk;
-                saveWeb3State();
-                syncUI();
-            });
+            // Try connecting to real Phantom or Solflare if installed
+            if (name === 'Phantom' && window.solana && window.solana.isPhantom) {
+                window.solana.connect()
+                    .then(resp => {
+                        const pk = resp.publicKey.toString();
+                        window.web3State.connected = true;
+                        window.web3State.walletName = "Phantom";
+                        window.web3State.walletAddress = pk;
+                        
+                        // Try fetching real balance if window.solana has it, otherwise default
+                        saveWeb3State();
+                        syncUI();
+                    })
+                    .catch(err => {
+                        console.warn("Real Phantom wallet connection rejected, falling back to simulation.", err);
+                        runWalletSimulation(name);
+                    });
+            } else if (name === 'Solflare' && window.solflare) {
+                window.solflare.connect()
+                    .then(() => {
+                        const pk = window.solflare.publicKey.toString();
+                        window.web3State.connected = true;
+                        window.web3State.walletName = "Solflare";
+                        window.web3State.walletAddress = pk;
+                        saveWeb3State();
+                        syncUI();
+                    })
+                    .catch(err => {
+                        console.warn("Real Solflare wallet connection rejected, falling back to simulation.", err);
+                        runWalletSimulation(name);
+                    });
+            } else {
+                // Fallback to simulation
+                runWalletSimulation(name);
+            }
         });
     });
+
+    function runWalletSimulation(name) {
+        simulateTransaction(`Connecting to ${name}`, `Awaiting authorization approval...`, 2000, () => {
+            window.web3State.connected = true;
+            window.web3State.walletName = name;
+            
+            // Generate simulated public key
+            const characters = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+            let pk = 'KoKo';
+            for(let i=0; i<36; i++) {
+                pk += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            window.web3State.walletAddress = pk;
+            saveWeb3State();
+            syncUI();
+        });
+    }
 
     // Claim Mined Coins
     const claimBtn = document.getElementById('claim-to-wallet-btn');
